@@ -120,8 +120,6 @@ export const livestreams = pgTable("livestreams", {
   category: text("category").notNull(),
   viewerCount: integer("viewer_count").default(0),
   createdAt: timestamp("created_at").defaultNow(),
-  // LiveKit fields
-  livekitRoomName: text("livekit_room_name"),
   duration: real("duration"), // Duration in seconds after stream ends
 });
 
@@ -211,8 +209,7 @@ export const insertLivestreamSchema = createInsertSchema(livestreams)
     startedAt: true, 
     endedAt: true, 
     viewerCount: true,
-    duration: true,
-    livekitRoomName: true
+    duration: true
   });
 
 export const insertForumPostSchema = createInsertSchema(forumPosts)
@@ -267,7 +264,6 @@ export type LivestreamUpdate = Partial<InsertLivestream> & {
   endedAt?: Date;
   viewerCount?: number;
   duration?: number;
-  livekitRoomName?: string;
 };
 
 export type InsertForumPost = z.infer<typeof insertForumPostSchema>;

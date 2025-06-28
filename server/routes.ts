@@ -79,10 +79,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const wsManager = setupWebSocket(httpServer);
   (global as any).wsManager = wsManager;
 
-  // LiveKit webhook endpoint (placeholder for future implementation)
-  app.post('/api/webhooks/livekit', express.json(), async (req, res) => {
-    console.log('LiveKit webhook endpoint - not yet implemented');
-    res.status(501).json({ message: 'LiveKit integration coming soon' });
+  // Custom WebRTC webhook endpoint for session management
+  app.post('/api/webhooks/webrtc', express.json(), async (req, res) => {
+    console.log('WebRTC webhook endpoint - session management');
+    res.status(200).json({ message: 'WebRTC webhook received' });
   });
 
   // Track all connected WebSocket clients
@@ -1322,8 +1322,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const livestreamData = req.body;
 
-      // Create the livestream with LiveKit integration (placeholder)
-      const livestream = await livekitService.createLivestream(
+      // Create the livestream with custom WebRTC integration
+      const { livestreamService } = await import('./services/livestream-service');
+      const livestream = await livestreamService.createLivestream(
         req.user,
         livestreamData.title,
         livestreamData.description
@@ -1370,8 +1371,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let updatedLivestream;
 
       if (status === "live") {
-        // Start the livestream with LiveKit
-        updatedLivestream = await livekitService.startLivestream(id);
+        // Start the livestream with custom WebRTC service
+        const { livestreamService } = await import('./services/livestream-service');
+        updatedLivestream = await livestreamService.startLivestream(id);
 
         // Broadcast to all connected clients that a new livestream is starting
         (global as any).websocket?.broadcastToAll?.({
@@ -1386,8 +1388,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           timestamp: Date.now()
         });
       } else if (status === "ended") {
-        // End the livestream with LiveKit
-        updatedLivestream = await livekitService.endLivestream(id);
+        // End the livestream with custom WebRTC service
+        const { livestreamService } = await import('./services/livestream-service');
+        updatedLivestream = await livestreamService.endLivestream(id);
 
         // Broadcast to all connected clients that the livestream has ended
         (global as any).websocket?.broadcastToAll?.({

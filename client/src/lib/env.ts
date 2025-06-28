@@ -35,9 +35,6 @@ export const env = {
   // External services
   STRIPE_PUBLIC_KEY: getEnvVar('VITE_STRIPE_PUBLIC_KEY', ''),
   
-  // Livestreaming configuration - LiveKit removed, placeholder for Zego Cloud
-  // ZEGO_APP_ID will be added here when implemented
-  
   // PWA configuration
   ENABLE_PWA: getBoolEnvVar('VITE_ENABLE_PWA', true),
   ENABLE_NOTIFICATIONS: getBoolEnvVar('VITE_ENABLE_NOTIFICATIONS', false),
